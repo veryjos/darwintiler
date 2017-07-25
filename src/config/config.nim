@@ -1,31 +1,34 @@
-import tables
-import json
-import strUtils
+import strtabs, json, strutils
 
 {.compile: "bindings.c"}
 proc keyCodeForKeyString(str: cstring): int {.importc}
 
-type Config* = object
-  gap*: int
-  displayEdgeGap*: int
+type
+  # I would use something like this instead of the key hash:
+  #Modifier* = enum
+  #  Cmd, Shift, Alt, Ctrl
+  #
+  #KeyEvent* = object
+  #  modifiers: set[Modifier]
+  #  keyCode: int
 
-  bindmap: Table[string, string]
+  Config* = object
+    gap*: int
+    displayEdgeGap*: int
+    bindmap: StringTableRef
 
-proc hasBinding*(s: var Config, keyHash: string): bool =
-  result = s.bindmap.hasKey(keyHash)
+proc hasBinding*(s: Config, keyHash: string): bool =
+  s.bindmap.hasKey(keyHash)
 
-proc getBinding*(s: var Config, keyHash: string): string =
-  if s.bindmap.hasKey(keyHash):
-    result = s.bindmap[keyHash]
-  else:
-    result = ""
+proc getBinding*(s: Config, keyHash: string): string =
+  s.bindmap.getOrDefault(keyHash)
 
 proc createKeyHash(inStr: string): string =
   var modNum = 256
   var keyNum = 0
 
   let tokens = split(inStr, "+")
-  
+
   for token in tokens:
     case token:
       of "cmd":
@@ -42,18 +45,14 @@ proc createKeyHash(inStr: string): string =
   return $modNum & ":" & $keyNum
 
 proc loadConfig*(filePath: string): Config =
-  let rootNode = parseFile("/Users/jos/.darwintiler.json")
+  let rootNode = parseFile(filePath)
 
-  var config = Config(
+  result = Config(
     gap: (rootNode["gap"].getNum(12)).int,
     displayEdgeGap: (rootNode["displayEdgeGap"].getNum(6)).int,
-
-    bindMap: initTable[string, string]()
+    bindMap: newStringTable()
   )
   for key, node in rootNode["bindings"]:
     let action = node.getStr()
     let keyHash = createKeyHash(key)
-
-    config.bindmap.add(keyHash, action)
-
-  result = config
+    result.bindmap[keyHash] = action
