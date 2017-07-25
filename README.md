@@ -29,6 +29,7 @@ A complete example of the configuration file is below.
 ```json
 {
   "gap": 12,
+  "displayEdgeGap": 6,
 
   "bindings": {
     "cmd+shift+u": "TopLeft",

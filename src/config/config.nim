@@ -7,6 +7,7 @@ proc keyCodeForKeyString(str: cstring): int {.importc}
 
 type Config* = object
   gap*: int
+  displayEdgeGap*: int
 
   bindmap: Table[string, string]
 
@@ -45,6 +46,7 @@ proc loadConfig*(filePath: string): Config =
 
   var config = Config(
     gap: (rootNode["gap"].getNum(12)).int,
+    displayEdgeGap: (rootNode["displayEdgeGap"].getNum(6)).int,
 
     bindMap: initTable[string, string]()
   )

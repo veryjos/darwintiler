@@ -2,12 +2,17 @@
 proc getDesktopBounds(x: var int, y: var int, w: var int, h: var int) {.importc}
 proc moveWindowImpl(x: int, y: int, w: int, h: int) {.importc}
 
-proc tileWindow*(x: int, y: int, gap: int) =
+proc tileWindow*(x: int, y: int, gap: int, displayEdgeGap: int) =
   var dx = 0
   var dy = 0
   var dw = 0
   var dh = 0
   getDesktopBounds(dx, dy, dw, dh)
+
+  dx += displayEdgeGap
+  dy += displayEdgeGap
+  dw -= displayEdgeGap * 2
+  dh -= displayEdgeGap * 2
 
   let dr = dx + dw
   let db = dy + dh

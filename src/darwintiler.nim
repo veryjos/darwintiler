@@ -14,28 +14,29 @@ var pConfig: Config
 
 proc doAction(action: string) =
   let gap = pConfig.gap
+  let displayEdgeGap = pConfig.displayEdgeGap
 
   case action:
     of "TopLeft":
-      tileWindow(-1, -1, gap)
+      tileWindow(-1, -1, gap, displayEdgeGap)
     of "Top":
-      tileWindow(0, -1, gap)
+      tileWindow(0, -1, gap, displayEdgeGap)
     of "TopRight":
-      tileWindow(1, -1, gap)
+      tileWindow(1, -1, gap, displayEdgeGap)
 
     of "Left":
-      tileWindow(-1, 0, gap)
+      tileWindow(-1, 0, gap, displayEdgeGap)
     of "Middle":
-      tileWindow(0, 0, gap)
+      tileWindow(0, 0, gap, displayEdgeGap)
     of "Right":
-      tileWindow(1, 0, gap)
+      tileWindow(1, 0, gap, displayEdgeGap)
 
     of "BottomLeft":
-      tileWindow(-1, 1, gap)
+      tileWindow(-1, 1, gap, displayEdgeGap)
     of "Bottom":
-      tileWindow(0, 1, gap)
+      tileWindow(0, 1, gap, displayEdgeGap)
     of "BottomRight":
-      tileWindow(1, 1, gap)
+      tileWindow(1, 1, gap, displayEdgeGap)
 
 # Handler for when keys are pressed, called from C.
 # Return 1 to override, 0 to let the event pass
