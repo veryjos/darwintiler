@@ -9,6 +9,8 @@ Super simple tiling helper for MacOS, inspired by QuickTile.
 ## Building
 darwintiler is written in nim and c. There are no external dependencies.
 
+All you need is the [nim compiler](http://nim-lang.org/) and a c compiler.
+
 The binary will be placed in the "build" folder.
 
 ```bash
@@ -17,6 +19,8 @@ make release
 ````
 ---
 ## Usage
+
+This program requires you to allow explicit access to the Apple Accessibility Services API (Preferences -> Security and Privacy)
 
 Create a configuration file in ~/.darwintiler.json
 
@@ -42,3 +46,5 @@ A complete example of the configuration file is below.
 
 The focused window can be tiled using the specified hotkeys:
 ![Screenshot2](https://user-images.githubusercontent.com/11465187/28549696-ddc6740c-70a9-11e7-82db-1307a2bfb8df.gif "Screenshot 2")
+
+Background: [Kuvshinov Ilya](http://kuvshinov-ilya.deviantart.com/)
