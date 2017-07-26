@@ -42,7 +42,7 @@ proc createKeyHash(inStr: string): string =
   return $modNum & ":" & $keyNum
 
 proc loadConfig*(filePath: string): Config =
-  let rootNode = parseFile("/Users/jos/.darwintiler.json")
+  let rootNode = parseFile("filePath")
 
   var config = Config(
     gap: (rootNode["gap"].getNum(12)).int,
