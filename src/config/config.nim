@@ -1,48 +1,63 @@
-import strtabs, json, strutils
+import tables, json, strUtils, hashes
 
 {.compile: "bindings.c"}
 proc keyCodeForKeyString(str: cstring): int {.importc}
 
-type
-  # I would use something like this instead of the key hash:
-  #Modifier* = enum
-  #  Cmd, Shift, Alt, Ctrl
-  #
-  #KeyEvent* = object
-  #  modifiers: set[Modifier]
-  #  keyCode: int
+type Modifier* = enum
+  None = 256,
 
-  Config* = object
-    gap*: int
-    displayEdgeGap*: int
-    bindmap: StringTableRef
+  Shift = 131330,
+  Ctrl = 262401,
+  Alt = 524576,
+  Cmd = 1048840
 
-proc hasBinding*(s: Config, keyHash: string): bool =
-  s.bindmap.hasKey(keyHash)
+type KeyEvent* = object
+  modifiers*: int
+  keyCode*: int
 
-proc getBinding*(s: Config, keyHash: string): string =
-  s.bindmap.getOrDefault(keyHash)
+proc hash(keyEvent: KeyEvent): Hash =
+  var h: Hash = 0
 
-proc createKeyHash(inStr: string): string =
-  var modNum = 256
-  var keyNum = 0
+  h = h !& hash(keyEvent.modifiers)
+  h = h !& hash(keyEvent.keyCode)
+
+  result = !$h
+
+type Config* = object
+  gap*: int
+  displayEdgeGap*: int
+
+  bindmap: Table[KeyEvent, string]
+
+proc hasBinding*(s: Config, keyEvent: KeyEvent): bool =
+  s.bindmap.hasKey(keyEvent)
+
+proc getBinding*(s: Config, keyEvent: KeyEvent): string =
+  s.bindmap.getOrDefault(keyEvent)
+
+proc parseKeyBinding(inStr: string): KeyEvent =
+  var
+    modifiers = Modifier.None.int
+    keyCode = 0
 
   let tokens = split(inStr, "+")
-
+  
   for token in tokens:
     case token:
-      of "cmd":
-        modNum = modNum or 1048840
       of "shift":
-        modNum = modNum or 131330
-      of "alt":
-        modNum = modNum or 524576
+        modifiers = modifiers or Modifier.Shift.int
       of "control", "ctrl":
-        modNum = modNum or 262401
+        modifiers = modifiers or Modifier.Ctrl.int
+      of "alt":
+        modifiers = modifiers or Modifier.Alt.int
+      of "cmd":
+        modifiers = modifiers or Modifier.Cmd.int
       else:
-        keyNum = keyCodeForKeyString(token)
+        keyCode = keyCodeForKeyString(token)
 
-  return $modNum & ":" & $keyNum
+  KeyEvent(
+    modifiers: modifiers,
+    keyCode: keyCode)
 
 proc loadConfig*(filePath: string): Config =
   let rootNode = parseFile(filePath)
@@ -50,9 +65,12 @@ proc loadConfig*(filePath: string): Config =
   result = Config(
     gap: (rootNode["gap"].getNum(12)).int,
     displayEdgeGap: (rootNode["displayEdgeGap"].getNum(6)).int,
-    bindMap: newStringTable()
+
+    bindMap: initTable[KeyEvent, string]()
   )
-  for key, node in rootNode["bindings"]:
+
+  for binding, node in rootNode["bindings"]:
     let action = node.getStr()
-    let keyHash = createKeyHash(key)
-    result.bindmap[keyHash] = action
+    let keyEvent = parseKeyBinding(binding)
+
+    result.bindmap.add(keyEvent, action)
