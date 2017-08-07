@@ -45,11 +45,12 @@ proc nimLandHandler(keyCode: int, repeated: int, modifiers: int): int {.exportc.
     keyCode: keyCode)
 
   if pConfig.hasBinding(keyEvent):
-    # We don't want to do an action on keyrepeat, but we still want to snuff the event
+    # We don't want to do an action on keyrepeat...
     if repeated == 0:
       doAction(pConfig.getBinding(keyEvent))
-    else:
-      return 1
+
+    # ...but we still want to snuff the event
+    return 1
   
   return 0
 
