@@ -1,19 +1,24 @@
 import tables, json, strUtils, hashes
 
-{.compile: "bindings.c"}
-proc keyCodeForKeyString(str: cstring): int {.importc}
+proc getKeycodeForKeystring(str: cstring): int {.importc}
+proc getModifierForModifierstring(str: cstring): int {.importc}
 
 type Modifier* = enum
-  None = 256,
+  None  = 0x00,
 
-  Shift = 131330,
-  Ctrl = 262401,
-  Alt = 524576,
-  Cmd = 1048840
+  Shift = 0x01,
+  Ctrl  = 0x02,
+  Alt   = 0x04,
+  Cmd   = 0x08
 
 type KeyEvent* = object
   modifiers*: int
   keyCode*: int
+
+  debugString*: string
+
+proc `==`(a, b: KeyEvent): bool =
+  return a.keyCode == b.keyCode and a.modifiers == b.modifiers
 
 proc hash(keyEvent: KeyEvent): Hash =
   var h: Hash = 0
@@ -27,7 +32,7 @@ type Config* = object
   gap*: int
   displayEdgeGap*: int
 
-  bindmap: Table[KeyEvent, string]
+  bindmap*: Table[KeyEvent, string]
 
 proc hasBinding*(s: Config, keyEvent: KeyEvent): bool =
   s.bindmap.hasKey(keyEvent)
@@ -43,21 +48,17 @@ proc parseKeyBinding(inStr: string): KeyEvent =
   let tokens = split(inStr, "+")
   
   for token in tokens:
-    case token:
-      of "shift":
-        modifiers = modifiers or Modifier.Shift.int
-      of "control", "ctrl":
-        modifiers = modifiers or Modifier.Ctrl.int
-      of "alt":
-        modifiers = modifiers or Modifier.Alt.int
-      of "cmd":
-        modifiers = modifiers or Modifier.Cmd.int
-      else:
-        keyCode = keyCodeForKeyString(token)
+    let modifier = getModifierForModifierstring(token)
+
+    if modifier != 0:
+      modifiers = modifiers or modifier
+    else:
+      keyCode = getKeycodeForKeystring(token)
 
   KeyEvent(
     modifiers: modifiers,
-    keyCode: keyCode)
+    keyCode: keyCode,
+    debugString: inStr)
 
 proc loadConfig*(filePath: string): Config =
   let rootNode = parseFile(filePath)

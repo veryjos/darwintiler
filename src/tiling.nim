@@ -1,6 +1,5 @@
-{.compile: "tiling.c"}
 proc getDesktopBounds(x: var int, y: var int, w: var int, h: var int) {.importc}
-proc moveWindowImpl(x: int, y: int, w: int, h: int) {.importc}
+proc moveWindow(x: int, y: int, w: int, h: int) {.importc}
 
 proc tileWindow*(x: int, y: int, gap: int, displayEdgeGap: int) =
   var
@@ -54,4 +53,4 @@ proc tileWindow*(x: int, y: int, gap: int, displayEdgeGap: int) =
   ww -= gap * 2
   wh -= gap * 2
 
-  moveWindowImpl(wx, wy, ww, wh)
+  moveWindow(wx, wy, ww, wh)

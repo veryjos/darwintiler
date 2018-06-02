@@ -2,7 +2,7 @@
 
 version       = "0.1.0"
 author        = "Joseph Delgado"
-description   = "Tiling helper for MacOS"
+description   = "Tiling helper for MacOS and X"
 license       = "MIT"
 
 srcDir        = "src"

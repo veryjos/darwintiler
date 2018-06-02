@@ -1,13 +1,21 @@
-import config/config, tiling/tiling
+import config, tiling
 import tables, os, ospaths
 
 # C Imports and linking
-{.passL: "-framework ApplicationServices"}
-{.passL: "-framework Carbon"}
+# {.passL: "-framework ApplicationServices"}
+# {.passL: "-framework Carbon"}
 
-{.compile: "appservices.c"}
-proc isAuthorized: cint {.importc}
+# {.compile: "appservices.c"}
+# proc isAuthorized: cint {.importc}
+# proc createAndRunEventLoop: cint {.importc}
+
+{.passL: "-lX11"}
+{.compile: "backends/x11.c"}
+proc initializeBackend: cint {.importc}
+proc deinitializeBackend: cint {.importc}
+
 proc createAndRunEventLoop: cint {.importc}
+proc hookKey(modifiers: int, keycode: int): cint {.importc}
 
 var pConfig: Config
 
@@ -57,9 +65,11 @@ proc nimLandHandler(keyCode: int, repeated: int, modifiers: int): int {.exportc.
 proc main() =
   let configPath = getHomeDir() / ".darwintiler.json"
 
-  if isAuthorized() == 0:
-    echo "Need accessibility API authorizaton to use this :~)"
-    quit()
+  # Initialize native backend
+  let initializeErr = initializeBackend()
+  if initializeErr != 0:
+    echo "Failed to initialize native backend"
+    quit(QuitFailure)
 
   try:
     pConfig = loadConfig(configPath)
@@ -68,11 +78,19 @@ proc main() =
     echo "Couldn't read config file at ", configPath, " please create a config file"
     quit(QuitFailure)
 
-  # Create and run the Quartz event tap loop
+  # Hook each key for the specific platform
+  for keyEvent, _ in pConfig.bindmap:
+    let hookErr = hookKey(keyEvent.modifiers, keyEvent.keycode)
+
+    if hookErr != 0:
+      echo "Failed to hook key ", keyEvent.debugString, ". Is this already hooked by some other process?"
+      quit(QuitFailure)
+
+  # Create and run the platform specific event loop
   let err = createAndRunEventLoop()
 
   if err != 0:
-    echo "Failed to initialize Quartz event loop"
+    echo "Failed to initialize event loop"
     quit(QuitFailure)
 
 main()
