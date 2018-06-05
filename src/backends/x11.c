@@ -202,42 +202,6 @@ int moveWindow(int x, int y, int w, int h) {
     }
   }
 
-  /*
-  Atom _NET_WM_MOVERESIZE = XInternAtom(display, "_NET_WM_MOVERESIZE", True);
-
-  XEvent ev;
-
-  ev.type = ClientMessage;
-  ev.xclient.window = focused;
-  ev.xclient.message_type = _NET_WM_MOVERESIZE;
-  ev.xclient.format = 32;
-  ev.xclient.data.l[0] = x;
-  ev.xclient.data.l[1] = y;
-  ev.xclient.data.l[2] = 8;
-  ev.xclient.data.l[3] = 0;
-  ev.xclient.data.l[4] = 0;
-
-  int st = XSendEvent(display, focused, False, SubstructureNotifyMask | SubstructureRedirectMask, &ev);
-
-  printf("%d\n", st);
-
-  XSync(display, False);
-  */
-
-  /*
-  XWindowChanges wc;
-  wc.x = x;
-  wc.y = y;
-  wc.width = w;
-  wc.height = h;
-
-  XConfigureWindow(display, focused, CWWidth | CWHeight, &wc);
-  XSync(display, False);
-
-  XConfigureWindow(display, focused, CWX | CWY, &wc);
-  XSync(display, False);
-  */
-
   XMoveResizeWindow(display, focused, x, y, w, h);
   XSync(display, False);
 }
