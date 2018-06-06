@@ -1,16 +1,17 @@
 import config, tiling
 import tables, os, ospaths
 
-# C Imports and linking
-# {.passL: "-framework ApplicationServices"}
-# {.passL: "-framework Carbon"}
+# C Imports and linking for each platform's backend
+when system.hostOS == "macosx":
+  {.passL: "-framework ApplicationServices"}
+  {.passL: "-framework Carbon"}
 
-# {.compile: "appservices.c"}
-# proc isAuthorized: cint {.importc}
-# proc createAndRunEventLoop: cint {.importc}
+  {.compile: "backends/macos.c"}
+elif system.hostOS == "linux":
+  {.passL: "-lX11" }
 
-{.passL: "-lX11"}
-{.compile: "backends/x11.c"}
+  {.compile: "backends/x11.c"}
+
 proc initializeBackend: cint {.importc}
 proc deinitializeBackend: cint {.importc}
 
