@@ -21,7 +21,6 @@ int isAuthorized() {
 int initializeBackend() {
   // Check if we're authorized to run this app
   if (!isAuthorized()) {
-    fprintf(stderr, "Failed to initialize MacOS backend.\n");
     fprintf(stderr, "AXIsProcessTrusted returned false; does darwintiler have accessibility API permissions?\n");
 
     return 1;
@@ -139,7 +138,7 @@ int getModifierForModifierstring(char* modifierString) {
  * Gets the keycode for a key string..
  */
 int getKeycodeForKeystring(char* keystring) {
-  return keyCodeForKeyString(keyString);
+  return keyCodeForKeyString(keystring);
 }
 
 /**
@@ -149,6 +148,11 @@ static CGEventRef eventTapDispatcher(CGEventTapProxy proxy, CGEventType type, CG
   int repeated  = CGEventGetIntegerValueField(event, kCGKeyboardEventAutorepeat);
   int keycode   = CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
   int modifiers = (int)CGEventGetFlags(event);
+
+  // TODO: Find some other way to handle this other than removing the unknown bits.
+  modifiers &= (kCGEventFlagMaskShift | kCGEventFlagMaskAlternate |
+                 kCGEventFlagMaskCommand | kCGEventFlagMaskControl |
+                 kCGEventFlagMaskSecondaryFn);
 
   int override = nimLandHandler(keycode, repeated, modifiers);
 

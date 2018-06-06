@@ -1,7 +1,7 @@
 #ifndef _KEYCODES_H_
 #define _KEYCODES_H_
 
-#include <cstring.h>
+#include <string.h>
 
 /**
  * is this really what it's come to
