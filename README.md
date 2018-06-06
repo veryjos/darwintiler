@@ -22,6 +22,8 @@ make release
 
 On MacOS, this program requires you to allow explicit access to the Apple Accessibility Services API (Preferences -> Security and Privacy).
 
+On MacOS Sierra, you can no longer add CLI apps to this list of services, so you should either use [macappshell](https://github.com/Xeoncross/macappshell) or similar program to create a proper .app (or you could naively add your entire terminal to this list).
+
 Create a configuration file in ~/.darwintiler.json
 
 A complete example of the configuration file is below.
