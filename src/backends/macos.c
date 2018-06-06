@@ -32,9 +32,7 @@ int initializeBackend() {
 /**
  * Kills the MacOS backend for darwintiler
  */
-int deinitializeBackend() {
-  // TODO
-  return 0;
+void deinitializeBackend() {
 }
 
 /**

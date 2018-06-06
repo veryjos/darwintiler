@@ -39,7 +39,7 @@ int initializeBackend() {
 /**
  * Kills the X11 backend for darwintiler
  */
-int deinitializeBackend() {
+void deinitializeBackend() {
   XCloseDisplay(display);
 }
 

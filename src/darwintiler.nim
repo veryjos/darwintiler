@@ -13,7 +13,7 @@ elif system.hostOS == "linux":
   {.compile: "backends/x11.c"}
 
 proc initializeBackend: cint {.importc}
-proc deinitializeBackend: cint {.importc}
+proc deinitializeBackend() {.importc}
 
 proc createAndRunEventLoop: cint {.importc}
 proc hookKey(modifiers: int, keycode: int): cint {.importc}
@@ -70,6 +70,7 @@ proc main() =
   let initializeErr = initializeBackend()
   if initializeErr != 0:
     echo "Failed to initialize native backend"
+    deinitializeBackend()
     quit(QuitFailure)
 
   try:
@@ -77,6 +78,7 @@ proc main() =
 
   except:
     echo "Couldn't read config file at ", configPath, " please create a config file"
+    deinitializeBackend()
     quit(QuitFailure)
 
   # Hook each key for the specific platform
@@ -85,6 +87,7 @@ proc main() =
 
     if hookErr != 0:
       echo "Failed to hook key ", keyEvent.debugString, ". Is this already hooked by some other process?"
+      deinitializeBackend()
       quit(QuitFailure)
 
   # Create and run the platform specific event loop
@@ -92,6 +95,9 @@ proc main() =
 
   if err != 0:
     echo "Failed to initialize event loop"
+    deinitializeBackend()
     quit(QuitFailure)
+
+  deinitializeBackend()
 
 main()
