@@ -1,5 +1,5 @@
 # darwintiler
-Super simple tiling helper for MacOS (and now x11/Linux), inspired by QuickTile.
+Super simple tiling helper for MacOS (and now x11/Linux), inspired by [quicktile](https://github.com/ssokolow/quicktile).
 
 ![Screenshot1](https://user-images.githubusercontent.com/11465187/28549014-743e56d4-70a5-11e7-8285-bdc460dd984a.png "Screenshot 1")
 
