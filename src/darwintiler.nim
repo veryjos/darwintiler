@@ -8,7 +8,7 @@ when system.hostOS == "macosx":
 
   {.compile: "backends/macos.c"}
 elif system.hostOS == "linux":
-  {.passL: "-lX11" }
+  {.passL: "-lX11"}
 
   {.compile: "backends/x11.c"}
 
