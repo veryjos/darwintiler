@@ -10,5 +10,7 @@ matrix:
         - cd Nim
         - sh ci/build.sh
         - export PATH=$PATH:"`pwd`/bin"
+        - ./koch tools -d:release
+        - nimble install -y
         - cd ..
         - make
