@@ -1,0 +1,15 @@
+language: c
+
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+
+      script:
+        - git clone --depth=1 https://github.com/nim-lang/Nim.git
+        - cd Nim
+        - git checkout devel
+        - sh ci/build.sh
+        - export PATH=$PATH:"`pwd`/bin"
+        - cd ..
+        - make
