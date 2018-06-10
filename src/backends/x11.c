@@ -167,7 +167,8 @@ int moveWindow(int x, int y, int w, int h) {
     "\0"
   };
 
-  for (const char** namePtr = atomNames; namePtr[0][0] != 0; ++namePtr) {
+  const char** namePtr;
+  for (namePtr = atomNames; namePtr[0][0] != 0; ++namePtr) {
     const char* name = *namePtr;
     Atom atom = XInternAtom(display, name, True);
 
