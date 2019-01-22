@@ -47,6 +47,7 @@ proc tileWindow*(x: int, y: int, gap: int, displayEdgeGap: int) =
   elif wy + wh > db:
     wy = db - wh
 
+  # Apply gaps
   wx += gap
   wy += gap
 
