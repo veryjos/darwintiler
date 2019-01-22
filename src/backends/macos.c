@@ -69,8 +69,18 @@ int hookKey(int modifiers, int keycode) {
  * Gets the bounds of the active desktop, *excluding* the dock.
  */
 void getDesktopBounds(int* x, int* y, int* w, int* h) {
+  // Get the cursor position
+  CGEventRef event = CGEventCreate(NULL);
+  CGPoint cursorLocation = CGEventGetLocation(event);
+  CFRelease(event);
+
+  // Get the display which contains the cursor, that's the one we want to tile on
+  int numDisplays;
+  CGDirectDisplayID displays[16];
+  CGGetDisplaysWithPoint(cursorLocation, 16, displays, &numDisplays);
+
   HIRect bounds;
-  HIWindowGetAvailablePositioningBounds(kCGNullDirectDisplay, kHICoordSpace72DPIGlobal,
+  HIWindowGetAvailablePositioningBounds(displays[0], kHICoordSpace72DPIGlobal,
     &bounds);
 
   *x = bounds.origin.x;
