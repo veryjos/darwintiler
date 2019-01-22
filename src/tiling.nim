@@ -35,13 +35,14 @@ proc tileWindow*(x: int, y: int, gap: int, displayEdgeGap: int) =
   else:
     wh = dh
 
-  wx = x * dw
+  # Push the window in the direction of the tile, and cap to edge
+  wx += x * dw
   if wx < dx:
     wx = dx
   elif wx + ww > dr:
     wx = dr - ww
 
-  wy = y * dh
+  wy += y * dh
   if wy < dy:
     wy = dy
   elif wy + wh > db:
