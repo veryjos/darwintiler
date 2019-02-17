@@ -138,8 +138,26 @@ void getDesktopBounds(int* x, int* y, int* w, int* h) {
     (unsigned char**)&geometryList
   );
 
-  if (status != Success) {
-    fprintf(stderr, "Desktop doesn't support _NET_WORKAREA atom\n");
+  if (status != Success || len != 4) {
+    // Use _NET_DESKTOP_GEOMETRY as a fallback
+    Atom _NET_DESKTOP_GEOMETRY = XInternAtom(display, "_NET_DESKTOP_GEOMETRY", True);
+
+    int status = XGetWindowProperty(
+      display, root, _NET_DESKTOP_GEOMETRY, 0L, sizeof(Atom), False,
+      XA_CARDINAL, &actualType, &actualFormat, &len, &bytesAfterReturn,
+      (unsigned char**)&geometryList
+    );
+
+    if (status != Success || len != 2) {
+      fprintf(stderr, "Failed to query desktop position\n");
+
+      return;
+    }
+
+    *x = 0; *w = geometryList[0];
+    *y = 0; *h = geometryList[1];
+
+    XFree(geometryList);
 
     return;
   }
