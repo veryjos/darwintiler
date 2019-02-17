@@ -41,6 +41,8 @@ A complete example of the configuration file is below.
 }
 ```
 
+Note: Under X11, `,` and `.` are `comma` and `period` respectively.
+
 The focused window can be tiled using the specified hotkeys:
 ![Screenshot2](https://user-images.githubusercontent.com/11465187/28549696-ddc6740c-70a9-11e7-82db-1307a2bfb8df.gif "Screenshot 2")
 
