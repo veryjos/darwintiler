@@ -147,6 +147,8 @@ void getDesktopBounds(int* x, int* y, int* w, int* h) {
   // Get the first geometry
   *x = geometryList[0]; *y = geometryList[1];
   *w = geometryList[2]; *h = geometryList[3];
+
+  XFree(geometryList);
 }
 
 /**
