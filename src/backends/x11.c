@@ -102,6 +102,17 @@ int getModifierForModifierstring(char* modifierString) {
   } else if (strcmp(modifierString, "ctrl")    == 0 || 
              strcmp(modifierString, "control") == 0) {
     return ControlMask;
+  } else if (strcmp(modifierString, "alt")  == 0 ||
+             strcmp(modifierString, "mod1") == 0) {
+    return Mod1Mask;
+  } else if (strcmp(modifierString, "mod2")  == 0) {
+    return Mod2Mask;
+  } else if (strcmp(modifierString, "mod3")  == 0) {
+    return Mod3Mask;
+  } else if (strcmp(modifierString, "mod4")  == 0) {
+    return Mod4Mask;
+  } else if (strcmp(modifierString, "mod5")  == 0) {
+    return Mod5Mask;
   } else {
     return 0;
   }
