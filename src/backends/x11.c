@@ -42,52 +42,30 @@ void deinitializeBackend() {
 }
 
 Window getFocusedWindow() {
-  // Get the focused input
-  Window focusedInput;
+  // Get the root window for the screen
+  Window rootWindow = XDefaultRootWindow(display);
 
-  int focusType;
-  XGetInputFocus(display, &focusedInput, &focusType);
+  // Get the active window
+  Atom NET_ACTIVE_WINDOW = XInternAtom(display, "_NET_ACTIVE_WINDOW", False);
 
+  Atom actual_type;
+  int actual_format;
+  unsigned long num_items;
+  unsigned long bytes_after;
+  unsigned char *prop;
 
-  // Now search upwards for the focused root window (WM_CLASS)
-  Atom WM_CLASS = XInternAtom(display, "WM_CLASS", False);
-  Window focusedWindow = focusedInput;
-  Bool done = False;
-  while (!done) {
-    Atom actual;
-    int actualFormat;
-    unsigned long numItems, bytesAfterReturn;
-    unsigned char* value;
+  int status = XGetWindowProperty(display, rootWindow,
+      NET_ACTIVE_WINDOW, 0, (~0L), False, AnyPropertyType, &actual_type,
+      &actual_format, &num_items, &bytes_after, &prop
+  );
 
-    int state = XGetWindowProperty(
-      display, focusedWindow, WM_CLASS, 0L, sizeof(Atom), False,
-      AnyPropertyType, &actual, &actualFormat, &numItems, &bytesAfterReturn,
-      &value
-    );
-
-    if (state == Success) {
-      XFree(value);
-    }
-
-    if (numItems > 0) {
-      // Found it!
-      break;
-    } else {
-      // Search up
-      Window root, parent;
-      Window* children;
-      unsigned int numChildren;
-
-      XQueryTree(display, focusedWindow, &root, &parent, &children, &numChildren);
-      XFree(children);
-
-      focusedWindow = parent;
-
-      if (!focusedWindow) {
-        break;
-      }
-    }
+  if (status != Success) {
+    return 0;
   }
+
+  Window focusedWindow = *((Window*)prop);
+
+  free(prop);
 
   return focusedWindow;
 }
@@ -230,7 +208,15 @@ int moveWindow(int x, int y, int w, int h) {
     }
   }
 
-  XMoveResizeWindow(display, focused, x, y, w, h);
+  XWindowChanges wc;
+  wc.x = x;
+  wc.y = y;
+  wc.width = w;
+  wc.height = h;
+
+  XConfigureWindow(display, focused,
+      CWX | CWY | CWWidth | CWHeight, &wc);
+
   XSync(display, False);
 }
 
