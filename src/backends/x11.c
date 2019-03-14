@@ -222,8 +222,6 @@ int moveWindow(int x, int y, int w, int h) {
           y -= frameExtentsList[2]; h += frameExtentsList[2];
           w += frameExtentsList[1]; h += frameExtentsList[3];
         } else {
-          // x += frameExtentsList[0]; w -= frameExtentsList[0];
-          // y += frameExtentsList[2]; h -= frameExtentsList[2];
           w -= frameExtentsList[0]; h -= frameExtentsList[2];
         }
       }
