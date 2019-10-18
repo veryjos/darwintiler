@@ -13,8 +13,10 @@ jobs:
         cd Nim
         chmod +x ./build_all.sh
         ./build_all.sh
-        cd ../
         export PATH=$PWD/build:$PATH
+        ls
+        ls $PWD/build
+        cd ../
     - name: Fetch darwintiler
       run: git clone https://github.com/veryjos/darwintiler
     - name: Build darwintiler
