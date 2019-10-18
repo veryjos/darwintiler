@@ -2,7 +2,7 @@ name: build
 on:
   push:
     branches:
-      - master
+      - github_actions
 jobs:
   build:
     runs-on: macos-latest
