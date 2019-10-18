@@ -16,4 +16,6 @@ jobs:
     - name: Fetch darwintiler
       run: git clone https://github.com/veryjos/darwintiler
     - name: Build darwintiler
-      run: make
+      run: |
+        cd darwintiler
+        make
