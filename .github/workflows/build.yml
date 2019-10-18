@@ -13,7 +13,7 @@ jobs:
         cd Nim
         chmod +x ./build_all.sh
         ./build_all.sh
-        export PATH=$PWD/build:$PATH
+        export PATH="$PWD/build:$PATH"
         ls
         ls $PWD/build
         cd ../
