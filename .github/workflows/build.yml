@@ -8,15 +8,7 @@ jobs:
     runs-on: macos-latest
     steps:
     - name: Install nim
-      run: |
-        git clone https://github.com/nim-lang/Nim.git
-        cd Nim
-        chmod +x ./build_all.sh
-        ./build_all.sh
-        export PATH="$PWD/build:$PATH"
-        ls
-        ls $PWD/build
-        cd ../
+      run: brew install nim
     - name: Fetch darwintiler
       run: git clone https://github.com/veryjos/darwintiler
     - name: Build darwintiler
