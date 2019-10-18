@@ -15,3 +15,8 @@ jobs:
       run: |
         cd darwintiler
         make
+    - name: Upload artifacts
+      uses: actions/upload-artifact@master
+      with:
+        name: binary
+        path: ./darwintiler/build/darwintiler
