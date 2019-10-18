@@ -13,6 +13,7 @@ jobs:
         cd Nim
         chmod +x ./build_all.sh
         ./build_all.sh
+    - name: Fetch darwintiler
+      run: git clone https://github.com/veryjos/darwintiler
     - name: Build darwintiler
-      run: |
-        make
+      run: make
