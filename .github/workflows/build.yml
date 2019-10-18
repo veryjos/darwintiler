@@ -1,0 +1,21 @@
+name: build
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: macos-latest
+    container:
+      image: snapcore/snapcraft
+    steps:
+    - uses: actions/checkout@1
+    - name: Install nim
+      runs: |
+        git clone https://github.com/nim-lang/Nim.git
+        cd Nim
+        chmod +x ./build_all.sh
+        ./build_all.sh
+    - name: Build darwintiler
+      runs: |
+        make
