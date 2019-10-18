@@ -6,8 +6,6 @@ on:
 jobs:
   build:
     runs-on: macos-latest
-    container:
-      image: snapcore/snapcraft
     steps:
     - uses: actions/checkout@1
     - name: Install nim
