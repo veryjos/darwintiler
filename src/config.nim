@@ -64,8 +64,8 @@ proc loadConfig*(filePath: string): Config =
   let rootNode = parseFile(filePath)
 
   result = Config(
-    gap: (rootNode["gap"].getNum(12)).int,
-    displayEdgeGap: (rootNode["displayEdgeGap"].getNum(6)).int,
+    gap: (rootNode["gap"].getInt(12)),
+    displayEdgeGap: (rootNode["displayEdgeGap"].getInt(6)),
 
     bindMap: initTable[KeyEvent, string]()
   )
