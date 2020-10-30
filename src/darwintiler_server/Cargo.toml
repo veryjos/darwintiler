@@ -1,0 +1,14 @@
+[package]
+name = "darwintiler_server"
+version = "0.1.0"
+authors = ["veryjos <jos@veryjos.com>"]
+edition = "2018"
+description = "End-user daemon for darwintiler."
+
+[dependencies]
+darwintiler_common = { path="../darwintiler_common" }
+
+shared_memory = "0.11.3"
+
+[target.'cfg(unix)'.dependencies.darwintiler_backend_x11]
+path = "../darwintiler_backend_x11"

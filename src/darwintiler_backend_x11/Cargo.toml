@@ -1,0 +1,10 @@
+[package]
+name = "darwintiler_backend_x11"
+version = "0.1.0"
+authors = ["veryjos <jos@veryjos.com>"]
+edition = "2018"
+
+[dependencies]
+darwintiler_common = { path="../darwintiler_common" }
+
+x11 = "2.18.2"

@@ -1,0 +1,6 @@
+[workspace]
+members = [
+  "src/darwintiler_server",
+  "src/darwintiler_common",
+  "src/darwintiler_backend_x11",
+]

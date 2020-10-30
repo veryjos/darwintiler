@@ -1,0 +1,6 @@
+// Key binding parser as a PEG.
+// Should parse stuff like shift+ctrl+u.
+
+char = { !("+") ~ ANY }
+ident = { char+ }
+key_chord = { ident ~ ("+"{1} ~ ident)* }
