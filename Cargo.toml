@@ -4,3 +4,8 @@ members = [
   "src/darwintiler_common",
   "src/darwintiler_backend_x11",
 ]
+
+[profile.release]
+panic = 'abort'
+opt-level = 'z'
+lto = true
